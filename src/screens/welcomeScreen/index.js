@@ -7,6 +7,8 @@ import {
   ImageBackground,
   View,
   ActivityIndicator,
+  ScrollView,
+  RefreshControl,
 } from 'react-native';
 import {getPermission, getUserCurrentLocation} from '../../utils';
 import {ErrorToast, ScreenContainer, Header} from '../../components/atoms';
@@ -26,6 +28,7 @@ const WelcomeScreen = () => {
   const [isGranted, setIsGranted] = useState(null);
   const [loading, setLoading] = useState(false);
   const [weatherLoading, setWeatherLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [dayWeather, setDayWeather] = useState([]);
   const [forecastWeatherData, setForecastWeatherData] = useState({});
   const [day, setDay] = useState(0);
@@ -95,6 +98,7 @@ const WelcomeScreen = () => {
       const longitude = locationRes.longitude;
       getWeatherForecastApi(latitude, longitude)
         .then(res => {
+          setError('');
           setForecastWeatherData(res);
           const today = moment().add(day, 'days').format('YYYY-MM-DD');
           setDayWeather(res[today]?.[0]);
@@ -103,10 +107,10 @@ const WelcomeScreen = () => {
           setError(err?.errorMessage);
         })
         .finally(() => {
+          setRefreshing(false);
           setWeatherLoading(false);
         });
     } catch (err) {
-      console.log('error', err);
       setError(err || ERROR_MESSAGES.SOMETHING_WENT_WRONG);
     }
   }, [isGranted]);
@@ -133,6 +137,12 @@ const WelcomeScreen = () => {
     });
   };
 
+  const onRefresh = () => {
+    setRefreshing(true);
+    // Calling again when user do Pull to refresh
+    fetchLocationDetails();
+  };
+
   return (
     <ScreenContainer>
       <ImageBackground
@@ -146,7 +156,11 @@ const WelcomeScreen = () => {
               <ActivityIndicator size={'large'} color={COLORS.BLACK} />
             </View>
           ) : (
-            <Fragment>
+            <ScrollView
+              style={SharedStyles.fullFlex}
+              refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+              }>
               <View style={SharedStyles.fullFlex}>
                 <LottieView
                   loop
@@ -158,7 +172,7 @@ const WelcomeScreen = () => {
                 />
               </View>
               <WeatherCard data={dayWeather} />
-            </Fragment>
+            </ScrollView>
           )}
         </View>
         <WeatherDayChanger

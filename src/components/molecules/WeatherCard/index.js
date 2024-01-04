@@ -34,7 +34,8 @@ const WeatherCard = ({data}) => {
         <View style={styles.rowCenter}>
           <MapPinIcon color={BLACK} size={ICON_SIZE} />
           <StyledText color={TEXT_GREY} textStyle={styles.locName}>
-            {data?.name}
+            {/* {data?.name} */}
+            {"Delhi"}
           </StyledText>
         </View>
       )}
