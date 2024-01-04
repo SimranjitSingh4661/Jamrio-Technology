@@ -8,6 +8,11 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  fullFlexCenter: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   flexWrap: {
     flexWrap: 'wrap',
   },
@@ -25,6 +30,7 @@ export default StyleSheet.create({
   rowCenter: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
   },
   positionAbsolute: {
     position: 'absolute',

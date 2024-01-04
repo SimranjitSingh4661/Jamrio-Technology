@@ -1,23 +1,19 @@
-import React, {Fragment} from 'react';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import {ArrowLeft} from 'lucide-react-native';
-import {COLORS} from '../../../constants';
+import React from 'react';
+import {StyleSheet, View} from 'react-native';
+import {COLORS, SCREEN} from '../../../constants';
 import StyledText from '../styledText';
-import {useNavigation} from '@react-navigation/native';
-import {SharedStyles} from '../../../shared';
+import LottieView from 'lottie-react-native';
 
-const Header = ({showBack = false, title}) => {
-  const navigation = useNavigation();
-  const onGoBackPress = () => {
-    navigation.goBack();
-  };
+const Header = () => {
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={onGoBackPress} style={styles.backIcon}>
-        <ArrowLeft size={30} color={COLORS.BLACK} />
-      </TouchableOpacity>
-
-      <StyledText textStyle={styles.title}>{title || ''}</StyledText>
+      <LottieView
+        loop
+        autoPlay
+        style={styles.animation}
+        source={require('../../../asstes/Lottie/sunny-windy-day.json')}
+      />
+      <StyledText textStyle={styles.title}>{'Weather App'}</StyledText>
     </View>
   );
 };
@@ -29,16 +25,17 @@ const styles = StyleSheet.create({
     paddingTop: 15,
     flexDirection: 'row',
     alignItems: 'center',
+    marginLeft: SCREEN.WIDTH / 5,
   },
-  backIcon: {
-    padding: 5,
-    borderRadius: 50,
-    ...SharedStyles.shadow,
-    backgroundColor: COLORS.WHITE,
+  animation: {
+    height: 70,
+    width: 70,
   },
   title: {
-    fontSize: 20,
+    fontSize: 25,
     paddingLeft: 20,
+    paddingBottom: 10,
+    fontWeight: 'bold',
     color: COLORS.BLACK,
   },
 });
